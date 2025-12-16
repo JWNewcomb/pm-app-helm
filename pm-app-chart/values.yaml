@@ -27,6 +27,21 @@ appConfig:
   # Default embedding model from repo
   embeddingModel: "cohere.embed-english-v3"
 
+#manual addition
+ezua:  
+  domainName: "${DOMAIN_NAME}"
+  #Use next options in order to configure the application endpoint.
+  #Example of a VirtualService is here:
+  virtualService:
+    endpoint: "ls-app.${DOMAIN_NAME}"
+    istioGateway: "istio-system/ezaf-gateway"
+
+  authorizationPolicy:
+    namespace: "istio-system"
+    providerName: "oauth2-proxy"
+    matchLabels:
+      istio: "ingressgateway"
+
 # Sensitive Data (Leave empty here and pass via --set or separate values file)
 secrets:
   mongodbUri: ""
