@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: JWNewcomb/predictive-maintenance # REPLACE THIS
+  repository: JWNewcomb/multiagent-predictive-maintenance # manual entry
   pullPolicy: IfNotPresent
   tag: "latest"
 
