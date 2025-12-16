@@ -1,0 +1,34 @@
+replicaCount: 1
+
+image:
+  repository: your-docker-username/predictive-maintenance # REPLACE THIS
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+resources: 
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+# Application Configuration
+appConfig:
+  databaseName: "agentic_predictive_maintenance"
+  awsRegion: "us-east-1"
+  # Default completion model from repo
+  completionModel: "us.anthropic.claude-3-5-haiku-20241022-v1:0" 
+  # Default embedding model from repo
+  embeddingModel: "cohere.embed-english-v3"
+
+# Sensitive Data (Leave empty here and pass via --set or separate values file)
+secrets:
+  mongodbUri: ""
+  awsAccessKeyId: ""
+  awsSecretAccessKey: ""

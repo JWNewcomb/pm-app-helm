@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "multiagent-predictive-maintenance.fullname" . }}
+  labels:
+    {{- include "multiagent-predictive-maintenance.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "multiagent-predictive-maintenance.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "multiagent-predictive-maintenance.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          env:
+            - name: DATABASE_NAME
+              value: {{ .Values.appConfig.databaseName | quote }}
+            - name: AWS_REGION
+              value: {{ .Values.appConfig.awsRegion | quote }}
+            - name: COMPLETION_MODEL
+              value: {{ .Values.appConfig.completionModel | quote }}
+            - name: EMBEDDING_MODEL
+              value: {{ .Values.appConfig.embeddingModel | quote }}
+            # Secrets
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "multiagent-predictive-maintenance.fullname" . }}
+                  key: mongodb-uri
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "multiagent-predictive-maintenance.fullname" . }}
+                  key: aws-access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "multiagent-predictive-maintenance.fullname" . }}
+                  key: aws-secret-access-key
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
