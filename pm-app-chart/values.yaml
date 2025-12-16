@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: your-docker-username/predictive-maintenance # REPLACE THIS
+  repository: JWNewcomb/predictive-maintenance # REPLACE THIS
   pullPolicy: IfNotPresent
   tag: "latest"
 
